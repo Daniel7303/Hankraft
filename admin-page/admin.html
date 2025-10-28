@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>HanKraft Admin Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; }
+    
+    .tab-active {
+      border-bottom: 2px solid #d4af37;
+      color: #d4af37;
+    }
+    
+    .spinner {
+      border: 3px solid rgba(212, 175, 55, 0.2);
+      border-top: 3px solid #d4af37;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .image-preview {
+      max-width: 200px;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+  
+  <!-- Login Screen -->
+  <div id="loginScreen" class="flex items-center justify-center min-h-screen">
+    <div class="bg-gray-800 p-10 rounded-lg shadow-2xl max-w-md w-full">
+      <h1 class="text-3xl font-bold text-center mb-8 text-yellow-500">HanKraft Admin</h1>
+      <form id="loginForm" class="space-y-4">
+        <input type="text" id="username" placeholder="Username" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" required />
+        <input type="password" id="password" placeholder="Password" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" required />
+        <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-700 text-black font-bold py-3 rounded transition">
+          Login
+        </button>
+        <p id="loginError" class="text-red-500 text-center hidden">Invalid credentials</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="adminDashboard" class="hidden">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-yellow-500">HanKraft Admin</h1>
+        <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white">Logout</button>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="max-w-7xl mx-auto px-6 mt-6">
+      <div class="flex space-x-6 border-b border-gray-700">
+        <button class="tab-btn tab-active px-4 py-3 font-semibold" data-tab="gallery">Gallery</button>
+        <button class="tab-btn px-4 py-3 font-semibold text-gray-400 hover:text-white" data-tab="services">Services</button>
+      </div>
+      <!-- Tab Content -->
+    <div class="mt-8">
+      <!-- Gallery Tab -->
+      <div id="gallery-tab" class="tab-content">
+        <div class="bg-gray-800 rounded-lg p-6 mb-6">
+          <h2 class="text-xl font-bold mb-4">Upload New Image</h2>
+          <form id="galleryUploadForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">Image</label>
+              <input type="file" id="galleryImage" accept="image/*" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" required />
+              <img id="galleryPreview" class="image-preview mt-4 hidden" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Title</label>
+              <input type="text" id="galleryTitle" placeholder="e.g., Abstract Expression" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" required />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Description (Optional)</label>
+              <textarea id="galleryDescription" placeholder="Brief description..." class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" rows="3"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Order (for sorting)</label>
+              <input type="number" id="galleryOrder" value="0" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" />
+            </div>
+            <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-black font-bold py-3 px-6 rounded transition">
+              Upload Image
+            </button>
+          </form>
+        </div>
+
+        <!-- Gallery List -->
+        <div class="bg-gray-800 rounded-lg p-6">
+          <h2 class="text-xl font-bold mb-4">Gallery Images</h2>
+          <div id="galleryList" class="space-y-4">
+            <div class="flex justify-center py-8">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services Tab -->
+      <div id="services-tab" class="tab-content hidden">
+        <div class="bg-gray-800 rounded-lg p-6 mb-6">
+          <h2 class="text-xl font-bold mb-4">Add New Service</h2>
+          <form id="serviceCreateForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">Service Name</label>
+              <input type="text" id="serviceName" placeholder="e.g., Fine Art & Murals" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" required />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Icon (Emoji)</label>
+              <input type="text" id="serviceIcon" placeholder="🎨" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" maxlength="2" required />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Description</label>
+              <textarea id="serviceDescription" placeholder="Describe the service..." class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" rows="4" required></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Order (for sorting)</label>
+              <input type="number" id="serviceOrder" value="0" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" />
+            </div>
+            <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-black font-bold py-3 px-6 rounded transition">
+              Create Service
+            </button>
+          </form>
+        </div>
+
+        <!-- Services List -->
+        <div class="bg-gray-800 rounded-lg p-6">
+          <h2 class="text-xl font-bold mb-4">All Services</h2>
+          <div id="servicesList" class="space-y-4">
+            <div class="flex justify-center py-8">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Service Modal -->
+  <div id="editServiceModal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+    <div class="bg-gray-800 rounded-lg p-6 max-w-lg w-full">
+      <h2 class="text-xl font-bold mb-4">Edit Service</h2>
+      <form id="serviceEditForm" class="space-y-4">
+        <input type="hidden" id="editServiceId" />
+        <div>
+          <label class="block text-sm font-medium mb-2">Service Name</label>
+          <input type="text" id="editServiceName" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Icon (Emoji)</label>
+          <input type="text" id="editServiceIcon" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" maxlength="2" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Description</label>
+          <textarea id="editServiceDescription" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" rows="4" required></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Order</label>
+          <input type="number" id="editServiceOrder" class="w-full p-3 bg-gray-700 border border-gray-600 rounded text-white" />
+        </div>
+        <div class="flex items-center">
+          <input type="checkbox" id="editServiceActive" class="mr-2" />
+          <label class="text-sm">Active</label>
+        </div>
+        <div class="flex space-x-4">
+          <button type="submit" class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-black font-bold py-3 rounded transition">
+            Save Changes
+          </button>
+          <button type="button" id="closeEditModal" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded transition">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://127.0.0.1:8000/api';
+    let authToken = null;
+
+    // ============================================
+    // Authentication
+    // ============================================
+    
+    const loginScreen = document.getElementById('loginScreen');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/login/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          authToken = data.token;
+          loginScreen.classList.add('hidden');
+          adminDashboard.classList.remove('hidden');
+          loadGallery();
+          loadServices();
+          showNotification('Welcome back!', 'success');
+        } else {
+          loginError.classList.remove('hidden');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showNotification('Connection error. Is Django running?', 'error');
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      authToken = null;
+      adminDashboard.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+      loginForm.reset();
+      showNotification('Logged out', 'info');
+    });
+
+    // ============================================
+    // Tab Navigation
+    // ============================================
+    
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabName = btn.dataset.tab;
+        
+        tabBtns.forEach(b => {
+          b.classList.remove('tab-active', 'text-yellow-500');
+          b.classList.add('text-gray-400');
+        });
+        btn.classList.add('tab-active', 'text-yellow-500');
+        btn.classList.remove('text-gray-400');
+
+        tabContents.forEach(content => content.classList.add('hidden'));
+        document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+      });
+    });
+
+    // ============================================
+    // Gallery Management
+    // ============================================
+    
+    const galleryUploadForm = document.getElementById('galleryUploadForm');
+    const galleryImageInput = document.getElementById('galleryImage');
+    const galleryPreview = document.getElementById('galleryPreview');
+
+    // Image preview
+    galleryImageInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          galleryPreview.src = e.target.result;
+          galleryPreview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    galleryUploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('image', galleryImageInput.files[0]);
+      formData.append('title', document.getElementById('galleryTitle').value);
+      formData.append('description', document.getElementById('galleryDescription').value);
+      formData.append('order', document.getElementById('galleryOrder').value);
+      formData.append('is_active', 'true');
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/gallery/create/`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` },
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showNotification('Image uploaded successfully!', 'success');
+          galleryUploadForm.reset();
+          galleryPreview.classList.add('hidden');
+          loadGallery();
+        } else {
+          showNotification('Upload failed', 'error');
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        showNotification('Upload error', 'error');
+      }
+    });
+
+    async function loadGallery() {
+      const container = document.getElementById('galleryList');
+      container.innerHTML = '<div class="flex justify-center py-8"><div class="spinner"></div></div>';
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/gallery/`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        const images = await response.json();
+        
+        if (images.length === 0) {
+          container.innerHTML = '<p class="text-gray-400 text-center py-8">No images yet</p>';
+          return;
+        }
+
+        container.innerHTML = '';
+        images.forEach(img => {
+          const div = document.createElement('div');
+          div.className = 'flex items-center justify-between bg-gray-700 p-4 rounded';
+          div.innerHTML = `
+            <div class="flex items-center space-x-4">
+              <img src="${API_BASE_URL.replace('/api', '')}${img.image_url}" class="w-20 h-20 object-cover rounded" />
+              <div>
+                <h3 class="font-semibold">${img.title}</h3>
+                <p class="text-sm text-gray-400">${img.description || 'No description'}</p>
+                <span class="text-xs ${img.is_active ? 'text-green-400' : 'text-red-400'}">${img.is_active ? 'Active' : 'Inactive'}</span>
+              </div>
+            </div>
+            <button onclick="deleteGalleryImage(${img.id})" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm">
+              Delete
+            </button>
+          `;
+          container.appendChild(div);
+        });
+      } catch (error) {
+        console.error('Load gallery error:', error);
+        container.innerHTML = '<p class="text-red-400 text-center py-8">Failed to load gallery</p>';
+      }
+    }
+
+    async function deleteGalleryImage(id) {
+      if (!confirm('Are you sure you want to delete this image?')) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/gallery/${id}/delete/`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showNotification('Image deleted', 'success');
+          loadGallery();
+        } else {
+          showNotification('Delete failed', 'error');
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        showNotification('Delete error', 'error');
+      }
+    }
+
+    // ============================================
+    // Services Management
+    // ============================================
+    
+    const serviceCreateForm = document.getElementById('serviceCreateForm');
+    const serviceEditForm = document.getElementById('serviceEditForm');
+    const editServiceModal = document.getElementById('editServiceModal');
+    const closeEditModal = document.getElementById('closeEditModal');
+
+    serviceCreateForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const serviceData = {
+        name: document.getElementById('serviceName').value,
+        icon: document.getElementById('serviceIcon').value,
+        description: document.getElementById('serviceDescription').value,
+        order: document.getElementById('serviceOrder').value,
+        is_active: true
+      };
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/services/create/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify(serviceData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showNotification('Service created successfully!', 'success');
+          serviceCreateForm.reset();
+          loadServices();
+        } else {
+          showNotification('Create failed', 'error');
+        }
+      } catch (error) {
+        console.error('Create error:', error);
+        showNotification('Create error', 'error');
+      }
+    });
+
+    async function loadServices() {
+      const container = document.getElementById('servicesList');
+      container.innerHTML = '<div class="flex justify-center py-8"><div class="spinner"></div></div>';
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/services/`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        const services = await response.json();
+        
+        if (services.length === 0) {
+          container.innerHTML = '<p class="text-gray-400 text-center py-8">No services yet</p>';
+          return;
+        }
+
+        container.innerHTML = '';
+        services.forEach(service => {
+          const div = document.createElement('div');
+          div.className = 'flex items-center justify-between bg-gray-700 p-4 rounded';
+          div.innerHTML = `
+            <div class="flex items-center space-x-4">
+              <div class="text-4xl">${service.icon}</div>
+              <div>
+                <h3 class="font-semibold">${service.name}</h3>
+                <p class="text-sm text-gray-400">${service.description.substring(0, 100)}...</p>
+                <span class="text-xs ${service.is_active ? 'text-green-400' : 'text-red-400'}">${service.is_active ? 'Active' : 'Inactive'}</span>
+              </div>
+            </div>
+            <div class="flex space-x-2">
+              <button onclick="editService(${service.id})" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">
+                Edit
+              </button>
+              <button onclick="deleteService(${service.id})" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm">
+                Delete
+              </button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      } catch (error) {
+        console.error('Load services error:', error);
+        container.innerHTML = '<p class="text-red-400 text-center py-8">Failed to load services</p>';
+      }
+    }
+
+    async function editService(id) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/services/`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const services = await response.json();
+        const service = services.find(s => s.id === id);
+
+        if (service) {
+          document.getElementById('editServiceId').value = service.id;
+          document.getElementById('editServiceName').value = service.name;
+          document.getElementById('editServiceIcon').value = service.icon;
+          document.getElementById('editServiceDescription').value = service.description;
+          document.getElementById('editServiceOrder').value = service.order;
+          document.getElementById('editServiceActive').checked = service.is_active;
+          editServiceModal.classList.remove('hidden');
+        }
+      } catch (error) {
+        console.error('Edit service error:', error);
+      }
+    }
+
+    serviceEditForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const id = document.getElementById('editServiceId').value;
+      const serviceData = {
+        name: document.getElementById('editServiceName').value,
+        icon: document.getElementById('editServiceIcon').value,
+        description: document.getElementById('editServiceDescription').value,
+        order: document.getElementById('editServiceOrder').value,
+        is_active: document.getElementById('editServiceActive').checked
+      };
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/services/${id}/update/`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify(serviceData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showNotification('Service updated!', 'success');
+          editServiceModal.classList.add('hidden');
+          loadServices();
+        } else {
+          showNotification('Update failed', 'error');
+        }
+      } catch (error) {
+        console.error('Update error:', error);
+        showNotification('Update error', 'error');
+      }
+    });
+
+    closeEditModal.addEventListener('click', () => {
+      editServiceModal.classList.add('hidden');
+    });
+
+    async function deleteService(id) {
+      if (!confirm('Are you sure you want to delete this service?')) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/services/${id}/delete/`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showNotification('Service deleted', 'success');
+          loadServices();
+        } else {
+          showNotification('Delete failed', 'error');
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        showNotification('Delete error', 'error');
+      }
+    }
+
+    // ============================================
+    // Notification System
+    // ============================================
+    
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      const bgColor = type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600';
+      
+      notification.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded shadow-2xl z-50 transition-all duration-300`;
+      notification.textContent = message;
+      notification.style.transform = 'translateX(400px)';
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => notification.style.transform = 'translateX(0)', 10);
+      setTimeout(() => {
+        notification.style.transform = 'translateX(400px)';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Make functions globally accessible
+    window.deleteGalleryImage = deleteGalleryImage;
+    window.editService = editService;
+    window.deleteService = deleteService;
+  </script>
+</body>
+</html>

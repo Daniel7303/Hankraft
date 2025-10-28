@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="HanKraft LTD - Premier art, interior design, epoxy furniture, and custom crafts in Nigeria. Transform your space with our bespoke creations."
+    />
+    <title>HanKraft LTD | Art • Decor • Crafts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="favicon.ico" />
+    <style>
+      /* Smooth Scroll */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* WhatsApp Floating Button */
+      #whatsapp-chat {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+        z-index: 1000;
+        transition: all 0.3s ease;
+        font-size: 28px;
+      }
+      #whatsapp-chat:hover {
+        transform: scale(1.15) rotate(5deg);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+      }
+
+      /* Pulse Animation */
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      /* Gallery Image Hover Effect */
+      .gallery-img {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .gallery-img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Form Input Focus */
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        ring: 2px;
+        ring-color: #eab308;
+      }
+
+      /* Loading Spinner */
+      .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #eab308;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Modal Backdrop Blur */
+      .modal-backdrop {
+        backdrop-filter: blur(5px);
+      }
+
+      /* Mobile Menu Transition */
+      #mobileMenu {
+        transition: transform 0.3s ease-in-out;
+      }
+
+      /* Error Shake Animation */
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        75% {
+          transform: translateX(10px);
+        }
+      }
+
+      .shake {
+        animation: shake 0.5s;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 text-gray-800 font-sans">
+    <!-- Header -->
+    <header
+      class="bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-lg sticky top-0 z-50"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between p-4">
+        <h1
+          class="text-2xl md:text-3xl font-bold tracking-wide text-yellow-400"
+        >
+          HanKraft LTD
+        </h1>
+
+        <!-- Desktop Navigation -->
+        <nav class="space-x-6 hidden md:flex items-center">
+          <a href="#home" class="hover:text-yellow-400 transition">Home</a>
+          <a href="#gallery" class="hover:text-yellow-400 transition"
+            >Gallery</a
+          >
+          <a href="#services" class="hover:text-yellow-400 transition"
+            >Services</a
+          >
+          <a href="#order" class="hover:text-yellow-400 transition">Order</a>
+          <button id="adminLoginBtn" class="hover:text-yellow-400 transition">
+            Admin
+          </button>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button
+          id="mobileMenuBtn"
+          class="md:hidden text-white focus:outline-none"
+          aria-label="Toggle menu"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              id="menuIcon"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+            <path
+              id="closeIcon"
+              class="hidden"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <nav
+        id="mobileMenu"
+        class="md:hidden bg-gray-800 overflow-hidden max-h-0 transition-all duration-300"
+      >
+        <div class="flex flex-col space-y-2 p-4">
+          <a href="#home" class="hover:text-yellow-400 transition py-2">Home</a>
+          <a href="#gallery" class="hover:text-yellow-400 transition py-2"
+            >Gallery</a
+          >
+          <a href="#services" class="hover:text-yellow-400 transition py-2"
+            >Services</a
+          >
+          <a href="#order" class="hover:text-yellow-400 transition py-2"
+            >Order</a
+          >
+          <button
+            id="mobileAdminBtn"
+            class="hover:text-yellow-400 transition py-2 text-left"
+          >
+            Admin
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section
+      id="home"
+      class="relative h-[80vh] flex items-center justify-center text-center bg-cover bg-center"
+      style="
+        background-image: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e');
+      "
+    >
+      <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+      <div
+        class="relative z-10 bg-black bg-opacity-40 p-8 rounded-2xl backdrop-blur-sm max-w-3xl mx-4"
+      >
+        <h2
+          class="text-4xl md:text-6xl font-extrabold text-yellow-400 mb-4 drop-shadow-lg"
+        >
+          Bringing Art to Life
+        </h2>
+        <p class="text-lg md:text-xl text-gray-200 mb-8">
+          Art • Interior • Epoxy • Furniture • Craftsmanship
+        </p>
+        <a
+          href="#order"
+          class="inline-block bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-3 px-8 rounded-lg shadow-lg transform hover:scale-105 transition"
+        >
+          Place an Order
+        </a>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="bg-gray-50 py-16">
+      <div class="max-w-6xl mx-auto px-4 text-center">
+        <h3 class="text-4xl font-bold mb-4">Our Gallery</h3>
+        <p class="text-gray-600 mb-10">
+          Explore our latest creations and projects
+        </p>
+        <div
+          id="gallery-container"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4"
+            class="gallery-img rounded-xl shadow-md w-full h-64 object-cover"
+            alt="Custom Artwork"
+            loading="lazy"
+          />
+          <img
+            src="https://images.unsplash.com/photo-1505691938895-1758d7feb511"
+            class="gallery-img rounded-xl shadow-md w-full h-64 object-cover"
+            alt="Epoxy Table"
+            loading="lazy"
+          />
+          <img
+            src="https://images.unsplash.com/photo-1567016544507-5cfdc6ce06a9"
+            class="gallery-img rounded-xl shadow-md w-full h-64 object-cover"
+            alt="Interior Decor"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="max-w-6xl mx-auto py-16 px-4">
+      <h3 class="text-4xl font-bold mb-4 text-center">Our Services</h3>
+      <p class="text-gray-600 mb-10 text-center">
+        Crafting excellence in every detail
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div
+          class="bg-white shadow-lg p-8 rounded-xl hover:shadow-2xl transition transform hover:-translate-y-2"
+        >
+          <div class="text-4xl mb-4">🎨</div>
+          <h4 class="text-2xl font-bold mb-3">Art & Murals</h4>
+          <p class="text-gray-600">
+            Custom paintings and wall murals crafted with emotion and precision.
+          </p>
+        </div>
+        <div
+          class="bg-white shadow-lg p-8 rounded-xl hover:shadow-2xl transition transform hover:-translate-y-2"
+        >
+          <div class="text-4xl mb-4">🛋️</div>
+          <h4 class="text-2xl font-bold mb-3">Interior & Furniture</h4>
+          <p class="text-gray-600">
+            Designing elegant furniture and interiors tailored to your
+            lifestyle.
+          </p>
+        </div>
+        <div
+          class="bg-white shadow-lg p-8 rounded-xl hover:shadow-2xl transition transform hover:-translate-y-2"
+        >
+          <div class="text-4xl mb-4">✨</div>
+          <h4 class="text-2xl font-bold mb-3">Epoxy & Crafts</h4>
+          <p class="text-gray-600">
+            From resin tables to handcrafted pieces that elevate your space.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Order -->
+    <section
+      id="order"
+      class="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-16"
+    >
+      <div class="max-w-5xl mx-auto px-4 text-center">
+        <h3 class="text-4xl font-bold mb-4 text-yellow-400">
+          Place Your Order
+        </h3>
+        <p class="mb-10 text-gray-300 text-lg">
+          Fill out the form to place your custom order or make an inquiry.
+        </p>
+        <form id="orderForm" class="grid grid-cols-1 gap-5 max-w-md mx-auto">
+          <div>
+            <input
+              type="text"
+              id="name"
+              placeholder="Full Name"
+              class="p-4 rounded-lg text-gray-800 w-full border-2 border-transparent focus:border-yellow-400 transition"
+              required
+            />
+            <p id="nameError" class="text-red-400 text-sm mt-1 hidden">
+              Please enter your name
+            </p>
+          </div>
+          <div>
+            <input
+              type="email"
+              id="email"
+              placeholder="Email Address"
+              class="p-4 rounded-lg text-gray-800 w-full border-2 border-transparent focus:border-yellow-400 transition"
+              required
+            />
+            <p id="emailError" class="text-red-400 text-sm mt-1 hidden">
+              Please enter a valid email
+            </p>
+          </div>
+          <div>
+            <select
+              id="service"
+              class="p-4 rounded-lg text-gray-800 w-full border-2 border-transparent focus:border-yellow-400 transition"
+              required
+            >
+              <option value="">Select Service</option>
+              <option>Artwork / Painting</option>
+              <option>Interior Decor</option>
+              <option>Furniture</option>
+              <option>Epoxy / Craft</option>
+            </select>
+            <p id="serviceError" class="text-red-400 text-sm mt-1 hidden">
+              Please select a service
+            </p>
+          </div>
+          <div>
+            <textarea
+              id="details"
+              placeholder="Describe your request in detail..."
+              class="p-4 rounded-lg text-gray-800 w-full border-2 border-transparent focus:border-yellow-400 transition"
+              rows="4"
+              required
+            ></textarea>
+            <p id="detailsError" class="text-red-400 text-sm mt-1 hidden">
+              Please provide details
+            </p>
+          </div>
+          <button
+            type="submit"
+            id="submitBtn"
+            class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-4 rounded-lg shadow-lg transform hover:scale-105 transition flex items-center justify-center"
+          >
+            <span id="submitText">Submit Order</span>
+            <span id="submitSpinner" class="spinner ml-2 hidden"></span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section
+      id="dashboard"
+      class="max-w-5xl mx-auto py-16 px-4 text-center hidden"
+    >
+      <div class="bg-white rounded-2xl shadow-xl p-8">
+        <h3 class="text-3xl font-bold mb-4">Admin Dashboard</h3>
+        <p class="mb-8 text-gray-600">
+          Upload new artworks to your gallery below.
+        </p>
+        <div class="max-w-md mx-auto">
+          <input
+            type="file"
+            id="upload"
+            accept="image/*"
+            class="block w-full mb-4 p-3 border-2 border-gray-300 rounded-lg text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-yellow-500 file:text-gray-900 file:font-semibold hover:file:bg-yellow-600"
+          />
+          <button
+            id="addImage"
+            class="bg-gray-900 text-yellow-400 py-3 px-8 rounded-lg hover:bg-gray-700 transition w-full mb-4 font-semibold"
+          >
+            Add to Gallery
+          </button>
+          <button
+            id="logoutBtn"
+            class="bg-red-600 text-white py-3 px-8 rounded-lg hover:bg-red-700 transition w-full font-semibold"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- WhatsApp Chat -->
+    <a
+      href="https://wa.me/234XXXXXXXXXX"
+      id="whatsapp-chat"
+      title="Chat with HanKraft on WhatsApp"
+      class="pulse"
+      aria-label="Chat on WhatsApp"
+    >
+      💬
+    </a>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-8 text-center">
+      <p class="mb-2">
+        © <span id="year"></span> HanKraft LTD | All rights reserved.
+      </p>
+      <p class="text-sm text-gray-400">Crafting Dreams into Reality</p>
+    </footer>
+
+    <!-- Login Modal -->
+    <div
+      id="loginModal"
+      class="hidden fixed inset-0 bg-black bg-opacity-70 modal-backdrop z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl"
+      >
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">Admin Login</h2>
+        <input
+          type="password"
+          id="passwordInput"
+          placeholder="Enter Password"
+          class="border-2 border-gray-300 p-3 rounded-lg w-full mb-4 focus:border-yellow-400 focus:outline-none"
+        />
+        <button
+          id="loginBtn"
+          class="bg-gray-900 text-yellow-400 py-3 px-6 rounded-lg hover:bg-gray-800 w-full font-semibold transition transform hover:scale-105"
+        >
+          Login
+        </button>
+        <p id="loginError" class="text-red-500 mt-4 hidden font-semibold">
+          ❌ Incorrect password!
+        </p>
+        <button
+          id="closeModal"
+          class="mt-4 text-gray-500 hover:text-gray-700 text-sm"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Current Year
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const menuIcon = document.getElementById("menuIcon");
+      const closeIcon = document.getElementById("closeIcon");
+
+      mobileMenuBtn.addEventListener("click", () => {
+        const isOpen =
+          mobileMenu.style.maxHeight !== "0px" &&
+          mobileMenu.style.maxHeight !== "";
+        mobileMenu.style.maxHeight = isOpen ? "0px" : "300px";
+        menuIcon.classList.toggle("hidden");
+        closeIcon.classList.toggle("hidden");
+      });
+
+      // Close mobile menu when clicking a link
+      document.querySelectorAll("#mobileMenu a").forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.style.maxHeight = "0px";
+          menuIcon.classList.remove("hidden");
+          closeIcon.classList.add("hidden");
+        });
+      });
+
+      // Admin Login System
+      const adminLoginBtn = document.getElementById("adminLoginBtn");
+      const mobileAdminBtn = document.getElementById("mobileAdminBtn");
+      const loginModal = document.getElementById("loginModal");
+      const loginBtn = document.getElementById("loginBtn");
+      const loginError = document.getElementById("loginError");
+      const dashboard = document.getElementById("dashboard");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const closeModal = document.getElementById("closeModal");
+      const passwordInput = document.getElementById("passwordInput");
+
+      const ADMIN_PASSWORD = "HanKraft2025"; // Change this to your secure password
+
+      function openLoginModal() {
+        loginModal.classList.remove("hidden");
+        loginModal.classList.add("flex");
+        passwordInput.value = "";
+        loginError.classList.add("hidden");
+      }
+
+      function closeLoginModal() {
+        loginModal.classList.add("hidden");
+        loginModal.classList.remove("flex");
+      }
+
+      adminLoginBtn.addEventListener("click", openLoginModal);
+      mobileAdminBtn.addEventListener("click", () => {
+        openLoginModal();
+        mobileMenu.style.maxHeight = "0px";
+        menuIcon.classList.remove("hidden");
+        closeIcon.classList.add("hidden");
+      });
+
+      closeModal.addEventListener("click", closeLoginModal);
+
+      loginBtn.addEventListener("click", () => {
+        const inputPass = passwordInput.value;
+        if (inputPass === ADMIN_PASSWORD) {
+          closeLoginModal();
+          dashboard.classList.remove("hidden");
+          dashboard.scrollIntoView({ behavior: "smooth" });
+          showNotification("Welcome back, Admin! 👋", "success");
+        } else {
+          loginError.classList.remove("hidden");
+          passwordInput.classList.add("shake");
+          setTimeout(() => passwordInput.classList.remove("shake"), 500);
+        }
+      });
+
+      // Enter key to login
+      passwordInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") loginBtn.click();
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        dashboard.classList.add("hidden");
+        showNotification("Logged out successfully.", "info");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      // Close modal on backdrop click
+      loginModal.addEventListener("click", (e) => {
+        if (e.target === loginModal) closeLoginModal();
+      });
+
+      // Gallery Management
+      const uploadInput = document.getElementById("upload");
+      const addImageBtn = document.getElementById("addImage");
+      const galleryContainer = document.getElementById("gallery-container");
+
+      // Store uploaded images in memory
+      let uploadedImages = [];
+
+      addImageBtn.addEventListener("click", () => {
+        const file = uploadInput.files[0];
+        if (file) {
+          // Validate file size (max 5MB)
+          if (file.size > 5 * 1024 * 1024) {
+            showNotification(
+              "Image too large! Please use images under 5MB.",
+              "error"
+            );
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const imgData = e.target.result;
+            uploadedImages.push(imgData);
+
+            const img = document.createElement("img");
+            img.src = imgData;
+            img.className =
+              "gallery-img rounded-xl shadow-md w-full h-64 object-cover";
+            img.alt = "Uploaded Artwork";
+            img.loading = "lazy";
+            galleryContainer.appendChild(img);
+
+            showNotification("✅ Artwork added to gallery!", "success");
+            uploadInput.value = "";
+          };
+          reader.readAsDataURL(file);
+        } else {
+          showNotification("Please select an image first.", "error");
+        }
+      });
+
+      // Enhanced Order Form with Validation
+      const orderForm = document.getElementById("orderForm");
+      const nameInput = document.getElementById("name");
+      const emailInput = document.getElementById("email");
+      const serviceInput = document.getElementById("service");
+      const detailsInput = document.getElementById("details");
+      const submitBtn = document.getElementById("submitBtn");
+      const submitText = document.getElementById("submitText");
+      const submitSpinner = document.getElementById("submitSpinner");
+
+      function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      function showFieldError(fieldId, show) {
+        const errorEl = document.getElementById(fieldId + "Error");
+        if (show) {
+          errorEl.classList.remove("hidden");
+        } else {
+          errorEl.classList.add("hidden");
+        }
+      }
+
+      orderForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Reset errors
+        ["name", "email", "service", "details"].forEach((id) =>
+          showFieldError(id, false)
+        );
+
+        // Validate
+        let isValid = true;
+
+        if (nameInput.value.trim().length < 2) {
+          showFieldError("name", true);
+          isValid = false;
+        }
+
+        if (!validateEmail(emailInput.value)) {
+          showFieldError("email", true);
+          isValid = false;
+        }
+
+        if (!serviceInput.value) {
+          showFieldError("service", true);
+          isValid = false;
+        }
+
+        if (detailsInput.value.trim().length < 10) {
+          showFieldError("details", true);
+          isValid = false;
+        }
+
+        if (!isValid) {
+          showNotification("Please fill all fields correctly.", "error");
+          return;
+        }
+
+        // Show loading
+        submitText.textContent = "Sending...";
+        submitSpinner.classList.remove("hidden");
+        submitBtn.disabled = true;
+
+        // Prepare WhatsApp message
+        const name = encodeURIComponent(nameInput.value);
+        const email = encodeURIComponent(emailInput.value);
+        const service = encodeURIComponent(serviceInput.value);
+        const details = encodeURIComponent(detailsInput.value);
+
+        const msg = `Hello HanKraft LTD!%0A%0AI'm ${name} (${email})%0A%0AI'd like to order: ${service}%0A%0ADetails: ${details}`;
+
+        // Simulate delay then open WhatsApp
+        setTimeout(() => {
+          window.open(`https://wa.me/234XXXXXXXXXX?text=${msg}`, "_blank");
+
+          // Reset form
+          orderForm.reset();
+          submitText.textContent = "Submit Order";
+          submitSpinner.classList.add("hidden");
+          submitBtn.disabled = false;
+
+          showNotification("✅ Opening WhatsApp...", "success");
+        }, 800);
+      });
+
+      // Notification System
+      function showNotification(message, type = "info") {
+        const notification = document.createElement("div");
+        const bgColor =
+          type === "success"
+            ? "bg-green-500"
+            : type === "error"
+            ? "bg-red-500"
+            : "bg-blue-500";
+
+        notification.className = `fixed top-20 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300`;
+        notification.textContent = message;
+        notification.style.transform = "translateX(400px)";
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.style.transform = "translateX(0)";
+        }, 10);
+
+        setTimeout(() => {
+          notification.style.transform = "translateX(400px)";
+          setTimeout(() => notification.remove(), 300);
+        }, 3000);
+      }
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
