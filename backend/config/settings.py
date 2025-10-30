@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost').split(',')
+ALLOWED_HOSTS = ['hankraft-production.up.railway.app', '127.0.0.1', 'localhost']
 
 # Add Railway domain when deployed
 if 'RAILWAY_ENVIRONMENT' in os.environ:
@@ -131,3 +131,5 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
+
+
