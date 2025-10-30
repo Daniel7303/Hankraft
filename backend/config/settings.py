@@ -61,12 +61,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3')
+
+# Remove sslmode from URL if present
+if 'sslmode' in DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.split('?')[0]
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL", "sqlite:///db.sqlite3"),
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
 }
 
 # Password validation
